@@ -32,3 +32,15 @@ macro_rules! err_converter_with_into {
         }
     };
 }
+
+#[macro_export]
+macro_rules! err_convert_into_box {
+    () => {
+        impl From<Error> for Box<dyn std::error::Error + Send + Sync + 'static> {
+            fn from(error: Error) -> Self {
+                use failure::Fail;
+                error.compat().into()
+            }
+        }
+    };
+}
